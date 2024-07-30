@@ -9,7 +9,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 
 const PantryPage = () => {
   const { currentUser } = useAuth();
-  console.log('currentUser', currentUser)
+  console.log("this is current user", currentUser)
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleUpdate = () => {
@@ -25,7 +25,7 @@ const PantryPage = () => {
           <PantryForm item={selectedItem} onUpdate={handleUpdate} />
         </Grid>
         <Grid item xs={12}>
-          <PantryList userId={currentUser} />
+          <PantryList userId={currentUser.uid} />
         </Grid>
       </Grid>
       </ProtectedRoute>

@@ -4,7 +4,7 @@ import { Typography, Button, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
-
+import PantryList from './PantryList';
 const UserProfile = () => {
   const { currentUser, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -48,6 +48,7 @@ const UserProfile = () => {
           >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <PantryList userId={currentUser.uid} />
           </Menu>
         </div>
       ) : (

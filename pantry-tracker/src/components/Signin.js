@@ -14,7 +14,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (currentUser) {
-      router.push('/profile');
+      router.push('/');
     }
   }, [currentUser, router]);
 
@@ -23,7 +23,7 @@ const Signin = () => {
     setError('');
     try {
       await login(email, password);
-      router.push('/profile');
+      router.push('/');
     } catch (err) {
       setError(err.message);
     }
