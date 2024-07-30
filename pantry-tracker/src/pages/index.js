@@ -55,7 +55,11 @@ export default function HomePage() {
                 <Button variant="contained" color="primary">Manage Suppliers</Button>
               </Link>
             </Grid>
-            {/* Add other links as needed */}
+            <Grid item>
+              <Link href="/pantry" passHref>
+                <Button variant="contained" color="primary">Manage Pantry Items</Button>
+              </Link>
+            </Grid>
             <Grid item>
               <Button variant="contained" color="secondary" onClick={handleLogout}>
                 Logout
