@@ -5,11 +5,11 @@ import { TextField, Button, Grid, Typography } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 
-const Signup = () => {
+const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { signup, currentUser } = useAuth();
+  const { login, currentUser } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
     setError('');
     try {
-      await signup(email, password);
+      await login(email, password);
       router.push('/profile');
     } catch (err) {
       setError(err.message);
@@ -33,7 +33,7 @@ const Signup = () => {
     <form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h4">Sign Up</Typography>
+          <Typography variant="h4">Sign In</Typography>
         </Grid>
         {error && (
           <Grid item xs={12}>
@@ -61,7 +61,7 @@ const Signup = () => {
         </Grid>
         <Grid item xs={12}>
           <Button type="submit" variant="contained" color="primary">
-            Sign Up
+            Sign In
           </Button>
         </Grid>
       </Grid>
@@ -69,4 +69,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;

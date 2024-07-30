@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { createSeedUsers } from '../utils/userManagement';
 import { Typography, Button } from '@mui/material';
@@ -13,14 +15,16 @@ const SeedUsersPage = () => {
       await createSeedUsers();
       setMessage('Seed users created successfully!');
     } catch (error) {
+      console.error(error);
       setMessage('Failed to create seed users: ' + error.message);
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    // Optionally, run the seeder function on component mount
-    // handleSeedUsers();
+    if (process.env.NODE_ENV === 'development') {
+      handleSeedUsers();
+    }
   }, []);
 
   return (

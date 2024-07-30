@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { getUsers } from '../utils/userManagement';
 import { Typography, Grid, Card, CardContent } from '@mui/material';
