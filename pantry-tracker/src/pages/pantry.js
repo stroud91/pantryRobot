@@ -1,3 +1,5 @@
+'use client';
+
 import { useAuth } from '../contexts/AuthContext';
 import PantryForm from '../components/PantryForm';
 import PantryList from '../components/PantryList';

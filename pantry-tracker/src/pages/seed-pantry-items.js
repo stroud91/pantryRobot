@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { createSeedPantryItems } from '../utils/pantryItemManagement';
 import { Typography, Button } from '@mui/material';
@@ -21,7 +22,9 @@ const SeedPantryItemsPage = () => {
   };
 
   useEffect(() => {
-    // Optionally, run the seeder function on component mount
+    if (process.env.NODE_ENV === 'development') {
+        handleSeedPantryItems()
+    }
     // handleSeedPantryItems();
   }, []);
 
