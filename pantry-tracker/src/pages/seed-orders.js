@@ -20,7 +20,9 @@ const SeedOrdersPage = () => {
   };
 
   useEffect(() => {
-    // Optionally, run the seeder function on component mount
+    if (process.env.NODE_ENV === 'development') {
+        handleSeedOrders()
+    }
     // handleSeedOrders();
   }, []);
 

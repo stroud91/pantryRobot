@@ -1,28 +1,14 @@
-import { useState } from 'react';
-import WarehouseForm from '../components/WarehouseForm';
-import WarehouseList from '../components/WarehouseList';
-import { Grid, Typography } from '@mui/material';
+'use client';
 
-const WarehousesPage = () => {
-  const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+import WarehousesPage from '../components/WarehousesPage';
+import ProtectedRoute from '../components/ProtectedRoute';
 
-  const handleUpdate = () => {
-    setSelectedWarehouse(null);
-  };
-
+const Warehouses = () => {
   return (
-    <div>
-      <Typography variant="h4">Warehouses</Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <WarehouseForm warehouse={selectedWarehouse} onUpdate={handleUpdate} />
-        </Grid>
-        <Grid item xs={12}>
-          <WarehouseList />
-        </Grid>
-      </Grid>
-    </div>
+    <ProtectedRoute>
+      <WarehousesPage />
+    </ProtectedRoute>
   );
 };
 
-export default WarehousesPage;
+export default Warehouses;

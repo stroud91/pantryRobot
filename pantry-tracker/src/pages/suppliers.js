@@ -1,28 +1,14 @@
-import { useState } from 'react';
-import SupplierForm from '../components/SupplierForm';
-import SupplierList from '../components/SupplierList';
-import { Grid, Typography } from '@mui/material';
+'use client';
 
-const SuppliersPage = () => {
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
+import SuppliersPage from '../components/SuppliersPage';
+import ProtectedRoute from '../components/ProtectedRoute';
 
-  const handleUpdate = () => {
-    setSelectedSupplier(null);
-  };
-
+const Suppliers = () => {
   return (
-    <div>
-      <Typography variant="h4">Suppliers</Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <SupplierForm supplier={selectedSupplier} onUpdate={handleUpdate} />
-        </Grid>
-        <Grid item xs={12}>
-          <SupplierList />
-        </Grid>
-      </Grid>
-    </div>
+    <ProtectedRoute>
+      <SuppliersPage />
+    </ProtectedRoute>
   );
 };
 
-export default SuppliersPage;
+export default Suppliers;
