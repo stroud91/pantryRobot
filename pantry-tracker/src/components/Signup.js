@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { TextField, Button, Grid, Typography } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,7 +15,7 @@ const Signup = () => {
     e.preventDefault();
     setError('');
     try {
-      const userCredential = await signup(email, password);
+      await signup(email, password);
       await createUser(email, password);
     } catch (err) {
       setError(err.message);
