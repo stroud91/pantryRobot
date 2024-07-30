@@ -5,9 +5,11 @@ import PantryForm from '../components/PantryForm';
 import PantryList from '../components/PantryList';
 import { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const PantryPage = () => {
   const { currentUser } = useAuth();
+  console.log('currentUser', currentUser)
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleUpdate = () => {
@@ -16,15 +18,17 @@ const PantryPage = () => {
 
   return (
     <div>
+        <ProtectedRoute>
       <Typography variant="h4">Pantry Items</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <PantryForm item={selectedItem} onUpdate={handleUpdate} />
         </Grid>
         <Grid item xs={12}>
-          <PantryList userId={currentUser.id} />
+          <PantryList userId={currentUser} />
         </Grid>
       </Grid>
+      </ProtectedRoute>
     </div>
   );
 };
