@@ -4,6 +4,7 @@ import { useState } from 'react';
 import OrderForm from '../components/OrderForm';
 import OrderList from '../components/OrderList';
 import { Grid, Typography } from '@mui/material';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);

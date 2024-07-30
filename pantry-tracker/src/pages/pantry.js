@@ -22,7 +22,7 @@ const PantryPage = () => {
           <PantryForm item={selectedItem} onUpdate={handleUpdate} />
         </Grid>
         <Grid item xs={12}>
-          <PantryList userId={currentUser.uid} />
+          <PantryList userId={currentUser.id} />
         </Grid>
       </Grid>
     </div>
