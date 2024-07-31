@@ -3,18 +3,17 @@
 import { useEffect, useState } from 'react';
 import { getPantryItems, deletePantryItem } from '../utils/pantryItemManagement';
 import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
-const PantryList = () => {
+const PantryList = ({ userId, onEdit }) => {
   const [pantryItems, setPantryItems] = useState([]);
-  const { currentUser } = useAuth();
 
   useEffect(() => {
-    if (currentUser) {
-      const unsubscribe = getPantryItems(currentUser.uid, setPantryItems);
+    if (userId) {
+      const unsubscribe = getPantryItems(userId, setPantryItems);
       return () => unsubscribe();
     }
-  }, [currentUser]);
+  }, [userId]);
 
   const handleDelete = async (itemId) => {
     await deletePantryItem(itemId);
@@ -31,6 +30,9 @@ const PantryList = () => {
               <Typography>Quantity: {item.quantity} {item.unit}</Typography>
               <Typography>Category: {item.category}</Typography>
               <Typography>Expiration Date: {item.expirationDate.toDate().toString()}</Typography>
+              <Button variant="contained" color="primary" onClick={() => onEdit(item)}>
+                Edit
+              </Button>
               <Button variant="contained" color="secondary" onClick={() => handleDelete(item.itemId)}>
                 Delete
               </Button>

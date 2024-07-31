@@ -1,31 +1,82 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getWarehouses, deleteWarehouse } from '../utils/warehouseManagement';
+import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
+import Modal from '../components/Modal';
 import WarehouseForm from '../components/WarehouseForm';
-import WarehouseList from '../components/WarehouseList';
-import { Grid, Typography } from '@mui/material';
-import ProtectedRoute from '../components/ProtectedRoute';
 
-const WarehousesPage = () => {
+const WarehousePage = () => {
+  const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+  const [formOpen, setFormOpen] = useState(false);
 
-  const handleUpdate = () => {
+  useEffect(() => {
+    const fetchWarehouses = async () => {
+      const warehousesList = await getWarehouses();
+      setWarehouses(warehousesList);
+    };
+    fetchWarehouses();
+  }, []);
+
+  const handleOpenForm = (warehouse = null) => {
+    setSelectedWarehouse(warehouse);
+    setFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setFormOpen(false);
     setSelectedWarehouse(null);
   };
 
+  const handleSave = async () => {
+    setFormOpen(false);
+    const fetchWarehouses = async () => {
+      const warehousesList = await getWarehouses();
+      setWarehouses(warehousesList);
+    };
+    fetchWarehouses();
+  };
+
+  const handleDelete = async (warehouseId) => {
+    await deleteWarehouse(warehouseId);
+    setWarehouses(warehouses.filter(warehouse => warehouse.warehouseId !== warehouseId));
+  };
+
   return (
-    <ProtectedRoute>
+    <div>
       <Typography variant="h4">Warehouses</Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <WarehouseForm warehouse={selectedWarehouse} onUpdate={handleUpdate} />
-        </Grid>
-        <Grid item xs={12}>
-          <WarehouseList />
-        </Grid>
+      <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
+        Add Warehouse
+      </Button>
+      <Grid container spacing={2} style={{ marginTop: '20px' }}>
+        {warehouses && warehouses.map(warehouse => (
+          <Grid item xs={12} sm={6} md={4} key={warehouse.warehouseId}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">{warehouse.name}</Typography>
+                <Typography>Location: {warehouse.location}</Typography>
+                <Button variant="contained" color="secondary" onClick={() => handleOpenForm(warehouse)}>
+                  Edit
+                </Button>
+                <Button variant="contained" color="secondary" onClick={() => handleDelete(warehouse.warehouseId)}>
+                  Delete
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
-    </ProtectedRoute>
+      <Modal 
+        open={formOpen} 
+        handleClose={handleCloseForm} 
+        title={selectedWarehouse ? 'Edit Warehouse' : 'Add Warehouse'}
+        handleSave={handleSave}
+      >
+        <WarehouseForm warehouse={selectedWarehouse} onUpdate={handleSave} />
+      </Modal>
+    </div>
   );
 };
 
-export default WarehousesPage;
+export default WarehousePage;

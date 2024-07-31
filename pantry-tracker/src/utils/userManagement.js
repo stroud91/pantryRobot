@@ -1,7 +1,8 @@
 import { db } from './firebaseConfig';
-import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebaseConfig';
+import { collection, getDocs, doc, setDoc, query, where } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+
+const auth = getAuth();
 
 const createUser = async (email, password) => {
   try {
@@ -14,7 +15,11 @@ const createUser = async (email, password) => {
     });
     console.log(`User created: ${email}`);
   } catch (error) {
-    console.error(`Error creating user ${email}:`, error.message);
+    if (error.code === 'auth/email-already-in-use') {
+      console.log(`User already exists: ${email}`);
+    } else {
+      console.error(`Error creating user ${email}:`, error.message);
+    }
   }
 };
 

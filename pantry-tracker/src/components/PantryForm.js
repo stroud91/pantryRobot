@@ -3,15 +3,16 @@
 import { useState, useEffect } from 'react';
 import { TextField, Button, Grid, MenuItem } from '@mui/material';
 import { createPantryItem, updatePantryItem } from '../utils/pantryItemManagement';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const PantryForm = ({ item, onUpdate }) => {
+  const { currentUser } = useAuth();
   const [name, setName] = useState(item?.name || '');
   const [quantity, setQuantity] = useState(item?.quantity || '');
   const [unit, setUnit] = useState(item?.unit || '');
   const [expirationDate, setExpirationDate] = useState(item?.expirationDate ? item.expirationDate.toDate().toISOString().split('T')[0] : '');
   const [category, setCategory] = useState(item?.category || '');
-  const { currentUser } = useAuth();
+  
 
   useEffect(() => {
     if (item) {
@@ -70,7 +71,7 @@ const PantryForm = ({ item, onUpdate }) => {
             <MenuItem value="pieces">Pieces</MenuItem>
             <MenuItem value="loaf">Loaf</MenuItem>
             <MenuItem value="kg">Kg</MenuItem>
-            {/* Add more units as needed */}
+           
           </TextField>
         </Grid>
         <Grid item xs={12}>

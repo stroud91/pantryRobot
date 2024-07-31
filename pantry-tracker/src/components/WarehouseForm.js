@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TextField, Button, Grid } from '@mui/material';
+import { TextField, Grid } from '@mui/material';
 import { createWarehouse, updateWarehouse } from '../utils/warehouseManagement';
 
 const WarehouseForm = ({ warehouse, onUpdate }) => {
@@ -47,11 +47,6 @@ const WarehouseForm = ({ warehouse, onUpdate }) => {
             onChange={(e) => setLocation(e.target.value)}
             required
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
-            {warehouse ? 'Update' : 'Add'} Warehouse
-          </Button>
         </Grid>
       </Grid>
     </form>

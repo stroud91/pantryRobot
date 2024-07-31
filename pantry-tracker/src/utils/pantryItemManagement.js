@@ -30,6 +30,7 @@ const createSeedPantryItems = async (userId) => {
 };
 
 const getPantryItems = (userId, setPantryItems) => {
+
   const q = query(collection(db, "pantryItems"), where("userId", "==", userId));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
     const pantryItems = [];

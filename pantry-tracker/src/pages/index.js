@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { Container, Typography, Button, Grid } from '@mui/material';
 import Modal from '../components/Modal';
 import Signin from '../components/Signin';
 import Signup from '../components/Signup';
 
-export default function HomePage() {
+const HomePage = () => {
   const { currentUser, logout } = useAuth();
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
@@ -37,16 +37,16 @@ export default function HomePage() {
         ) : (
           <>
             <Grid item>
-              <Button variant="contained" color="primary">Profile</Button>
+              <Button variant="contained" color="primary" href="/pantry">Manage Pantry</Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary">Manage Warehouses</Button>
+              <Button variant="contained" color="primary" href="/warehouses">Manage Warehouses</Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary">Manage Orders</Button>
+              <Button variant="contained" color="primary" href="/orders">Manage Orders</Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="primary">Manage Suppliers</Button>
+              <Button variant="contained" color="primary" href="/suppliers">Manage Suppliers</Button>
             </Grid>
             <Grid item>
               <Button variant="contained" color="secondary" onClick={handleLogout}>
@@ -64,4 +64,6 @@ export default function HomePage() {
       </Modal>
     </Container>
   );
-}
+};
+
+export default HomePage;

@@ -2,10 +2,11 @@
 
 import { Typography, Button, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useRouter } from 'next/router';
 import PantryList from './PantryList';
 const UserProfile = () => {
+  
   const { currentUser, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
