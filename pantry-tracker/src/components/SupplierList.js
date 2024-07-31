@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { getSuppliers, deleteSupplier } from '../utils/supplierManagement';
 import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
@@ -7,11 +8,8 @@ const SupplierList = () => {
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
-    const fetchSuppliers = async () => {
-      const suppliersList = await getSuppliers();
-      setSuppliers(suppliersList);
-    };
-    fetchSuppliers();
+    const unsubscribe = getSuppliers(setSuppliers);
+    return () => unsubscribe();
   }, []);
 
   const handleDelete = async (supplierId) => {

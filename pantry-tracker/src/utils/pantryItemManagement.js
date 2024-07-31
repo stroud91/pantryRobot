@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, addDoc, getDoc, updateDoc, deleteDoc, query, where, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs, doc } from "firebase/firestore";
 
 const createPantryItem = async (item) => {
   await addDoc(collection(db, "pantryItems"), {
@@ -18,26 +18,27 @@ const createSeedPantryItems = async (userId) => {
     { name: 'Chicken Breast', quantity: 4, unit: 'pieces', expirationDate: new Date(), category: 'Meat', userId },
   ];
 
+  const existingItemsQuery = query(collection(db, "pantryItems"), where("userId", "==", userId));
+  const querySnapshot = await getDocs(existingItemsQuery);
+  const existingItems = querySnapshot.docs.map(doc => doc.data().name);
+
   for (const item of seedItems) {
-    await createPantryItem(item);
+    if (!existingItems.includes(item.name)) {
+      await createPantryItem(item);
+    }
   }
 };
 
-const getPantryItem = async (itemId) => {
-  const itemDoc = await getDoc(doc(db, "pantryItems", itemId));
-  if (itemDoc.exists()) {
-    return itemDoc.data();
-  } else {
-    console.log("No such document!");
-    return null;
-  }
-};
-
-const getPantryItems = async (userId) => {
+const getPantryItems = (userId, setPantryItems) => {
   const q = query(collection(db, "pantryItems"), where("userId", "==", userId));
-  const querySnapshot = await getDocs(q);
-  const pantryItems = querySnapshot.docs.map(doc => ({ ...doc.data(), itemId: doc.id }));
-  return pantryItems;
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const pantryItems = [];
+    querySnapshot.forEach((doc) => {
+      pantryItems.push({ ...doc.data(), itemId: doc.id });
+    });
+    setPantryItems(pantryItems);
+  });
+  return unsubscribe;
 };
 
 const updatePantryItem = async (itemId, updates) => {
@@ -49,4 +50,4 @@ const deletePantryItem = async (itemId) => {
   await deleteDoc(doc(db, "pantryItems", itemId));
 };
 
-export { createPantryItem, createSeedPantryItems, getPantryItem, getPantryItems, updatePantryItem, deletePantryItem };
+export { createPantryItem, createSeedPantryItems, getPantryItems, updatePantryItem, deletePantryItem };

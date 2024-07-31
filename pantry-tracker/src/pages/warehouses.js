@@ -1,8 +1,10 @@
+'use client';
+
 import { useState } from 'react';
 import WarehouseForm from '../components/WarehouseForm';
 import WarehouseList from '../components/WarehouseList';
 import { Grid, Typography } from '@mui/material';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 const WarehousesPage = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
@@ -12,8 +14,7 @@ const WarehousesPage = () => {
   };
 
   return (
-    <div>
-        <ProtectedRoute>
+    <ProtectedRoute>
       <Typography variant="h4">Warehouses</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -23,8 +24,7 @@ const WarehousesPage = () => {
           <WarehouseList />
         </Grid>
       </Grid>
-      </ProtectedRoute>
-    </div>
+    </ProtectedRoute>
   );
 };
 

@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, addDoc, getDoc, updateDoc, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, updateDoc, deleteDoc, onSnapshot, doc, query, getDocs } from "firebase/firestore";
 
 const createSupplier = async (name, contactInfo, address) => {
   await addDoc(collection(db, "suppliers"), {
@@ -19,25 +19,26 @@ const createSeedSuppliers = async () => {
     { name: 'Supplier E', contactInfo: '654-321-0987', address: '654 Elm St, City, Country' },
   ];
 
+  const existingSuppliersQuery = query(collection(db, "suppliers"));
+  const querySnapshot = await getDocs(existingSuppliersQuery);
+  const existingSuppliers = querySnapshot.docs.map(doc => doc.data().name);
+
   for (const supplier of seedSuppliers) {
-    await createSupplier(supplier.name, supplier.contactInfo, supplier.address);
+    if (!existingSuppliers.includes(supplier.name)) {
+      await createSupplier(supplier.name, supplier.contactInfo, supplier.address);
+    }
   }
 };
 
-const getSupplier = async (supplierId) => {
-  const supplierDoc = await getDoc(doc(db, "suppliers", supplierId));
-  if (supplierDoc.exists()) {
-    return supplierDoc.data();
-  } else {
-    console.log("No such document!");
-    return null;
-  }
-};
-
-const getSuppliers = async () => {
-  const querySnapshot = await getDocs(collection(db, "suppliers"));
-  const suppliers = querySnapshot.docs.map(doc => ({ ...doc.data(), supplierId: doc.id }));
-  return suppliers;
+const getSuppliers = (setSuppliers) => {
+  const unsubscribe = onSnapshot(collection(db, "suppliers"), (querySnapshot) => {
+    const suppliers = [];
+    querySnapshot.forEach((doc) => {
+      suppliers.push({ ...doc.data(), supplierId: doc.id });
+    });
+    setSuppliers(suppliers);
+  });
+  return unsubscribe;
 };
 
 const updateSupplier = async (supplierId, updates) => {
@@ -49,4 +50,4 @@ const deleteSupplier = async (supplierId) => {
   await deleteDoc(doc(db, "suppliers", supplierId));
 };
 
-export { createSupplier, createSeedSuppliers, getSupplier, getSuppliers, updateSupplier, deleteSupplier };
+export { createSupplier, createSeedSuppliers, getSuppliers, updateSupplier, deleteSupplier };

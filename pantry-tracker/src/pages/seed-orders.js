@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import { useEffect, useState } from 'react';
 import { createSeedOrders } from '../utils/orderManagement';
 import { Typography, Button } from '@mui/material';
@@ -21,9 +22,8 @@ const SeedOrdersPage = () => {
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
-        handleSeedOrders()
+      handleSeedOrders();
     }
-    // handleSeedOrders();
   }, []);
 
   return (

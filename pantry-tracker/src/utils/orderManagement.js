@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, addDoc, getDoc, updateDoc, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, updateDoc, deleteDoc, onSnapshot, doc, query, getDocs } from "firebase/firestore";
 
 const createOrder = async (itemId, supplierId, quantity, deliveryDate) => {
   await addDoc(collection(db, "orders"), {
@@ -22,25 +22,26 @@ const createSeedOrders = async () => {
     { itemId: 'item5', supplierId: 'supplier5', quantity: 30, deliveryDate: '2024-08-20' },
   ];
 
+  const existingOrdersQuery = query(collection(db, "orders"));
+  const querySnapshot = await getDocs(existingOrdersQuery);
+  const existingOrders = querySnapshot.docs.map(doc => ({ itemId: doc.data().itemId, supplierId: doc.data().supplierId }));
+
   for (const order of seedOrders) {
-    await createOrder(order.itemId, order.supplierId, order.quantity, order.deliveryDate);
+    if (!existingOrders.some(existingOrder => existingOrder.itemId === order.itemId && existingOrder.supplierId === order.supplierId)) {
+      await createOrder(order.itemId, order.supplierId, order.quantity, order.deliveryDate);
+    }
   }
 };
 
-const getOrder = async (orderId) => {
-  const orderDoc = await getDoc(doc(db, "orders", orderId));
-  if (orderDoc.exists()) {
-    return orderDoc.data();
-  } else {
-    console.log("No such document!");
-    return null;
-  }
-};
-
-const getOrders = async () => {
-  const querySnapshot = await getDocs(collection(db, "orders"));
-  const orders = querySnapshot.docs.map(doc => ({ ...doc.data(), orderId: doc.id }));
-  return orders;
+const getOrders = (setOrders) => {
+  const unsubscribe = onSnapshot(collection(db, "orders"), (querySnapshot) => {
+    const orders = [];
+    querySnapshot.forEach((doc) => {
+      orders.push({ ...doc.data(), orderId: doc.id });
+    });
+    setOrders(orders);
+  });
+  return unsubscribe;
 };
 
 const updateOrderStatus = async (orderId, status) => {
@@ -52,4 +53,4 @@ const deleteOrder = async (orderId) => {
   await deleteDoc(doc(db, "orders", orderId));
 };
 
-export { createOrder, createSeedOrders, getOrder, getOrders, updateOrderStatus, deleteOrder };
+export { createOrder, createSeedOrders, getOrders, updateOrderStatus, deleteOrder };

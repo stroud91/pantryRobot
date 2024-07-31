@@ -1,4 +1,5 @@
-'use client'
+'use client';
+
 import { useEffect, useState } from 'react';
 import { getWarehouses, deleteWarehouse } from '../utils/warehouseManagement';
 import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
@@ -7,11 +8,8 @@ const WarehouseList = () => {
   const [warehouses, setWarehouses] = useState([]);
 
   useEffect(() => {
-    const fetchWarehouses = async () => {
-      const warehousesList = await getWarehouses();
-      setWarehouses(warehousesList);
-    };
-    fetchWarehouses();
+    const unsubscribe = getWarehouses(setWarehouses);
+    return () => unsubscribe();
   }, []);
 
   const handleDelete = async (warehouseId) => {

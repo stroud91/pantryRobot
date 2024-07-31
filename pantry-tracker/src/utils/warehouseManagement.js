@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, addDoc, getDoc, updateDoc, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, getDoc, updateDoc, deleteDoc, onSnapshot, doc, query, getDocs } from "firebase/firestore";
 
 const createWarehouse = async (name, location) => {
   await addDoc(collection(db, "warehouses"), {
@@ -18,25 +18,26 @@ const createSeedWarehouses = async () => {
     { name: 'Warehouse E', location: '202 Storage Dr, City, Country' },
   ];
 
+  const existingWarehousesQuery = query(collection(db, "warehouses"));
+  const querySnapshot = await getDocs(existingWarehousesQuery);
+  const existingWarehouses = querySnapshot.docs.map(doc => doc.data().name);
+
   for (const warehouse of seedWarehouses) {
-    await createWarehouse(warehouse.name, warehouse.location);
+    if (!existingWarehouses.includes(warehouse.name)) {
+      await createWarehouse(warehouse.name, warehouse.location);
+    }
   }
 };
 
-const getWarehouse = async (warehouseId) => {
-  const warehouseDoc = await getDoc(doc(db, "warehouses", warehouseId));
-  if (warehouseDoc.exists()) {
-    return warehouseDoc.data();
-  } else {
-    console.log("No such document!");
-    return null;
-  }
-};
-
-const getWarehouses = async () => {
-  const querySnapshot = await getDocs(collection(db, "warehouses"));
-  const warehouses = querySnapshot.docs.map(doc => ({ ...doc.data(), warehouseId: doc.id }));
-  return warehouses;
+const getWarehouses = (setWarehouses) => {
+  const unsubscribe = onSnapshot(collection(db, "warehouses"), (querySnapshot) => {
+    const warehouses = [];
+    querySnapshot.forEach((doc) => {
+      warehouses.push({ ...doc.data(), warehouseId: doc.id });
+    });
+    setWarehouses(warehouses);
+  });
+  return unsubscribe;
 };
 
 const updateWarehouse = async (warehouseId, updates) => {
@@ -48,4 +49,4 @@ const deleteWarehouse = async (warehouseId) => {
   await deleteDoc(doc(db, "warehouses", warehouseId));
 };
 
-export { createWarehouse, createSeedWarehouses, getWarehouse, getWarehouses, updateWarehouse, deleteWarehouse };
+export { createWarehouse, createSeedWarehouses, getWarehouses, updateWarehouse, deleteWarehouse };

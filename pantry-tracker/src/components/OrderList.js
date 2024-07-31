@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { getOrders, deleteOrder } from '../utils/orderManagement';
 import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
@@ -7,11 +8,8 @@ const OrderList = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const ordersList = await getOrders();
-      setOrders(ordersList);
-    };
-    fetchOrders();
+    const unsubscribe = getOrders(setOrders);
+    return () => unsubscribe(); // Cleanup the subscription on unmount
   }, []);
 
   const handleDelete = async (orderId) => {
