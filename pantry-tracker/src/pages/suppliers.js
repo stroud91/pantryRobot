@@ -6,10 +6,12 @@ import SupplierList from '../components/SupplierList';
 import { Grid, Typography, Button } from '@mui/material';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Modal from '../components/Modal';
+import { useRouter } from 'next/router';
 
 const SuppliersPage = () => {
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleUpdate = () => {
     setSelectedSupplier(null);
@@ -25,7 +27,10 @@ const SuppliersPage = () => {
     <div className="container mx-auto px-4 py-8">
       <ProtectedRoute>
         <Typography variant="h4" className="text-2xl font-bold text-center mb-6">Suppliers</Typography>
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-between mb-4">
+        <Button variant="contained" color="secondary" onClick={() => router.back()}>
+            Back
+          </Button>
           <Button 
             variant="contained" 
             color="primary" 

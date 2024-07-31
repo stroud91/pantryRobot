@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { getOrders, deleteOrder } from '../utils/orderManagement';
 import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
 
-const OrderList = () => {
+const OrderList = ({ onEdit }) => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const unsubscribe = getOrders(setOrders);
-    return () => unsubscribe(); // Cleanup the subscription on unmount
+    return () => unsubscribe();
   }, []);
 
   const handleDelete = async (orderId) => {
@@ -29,6 +29,9 @@ const OrderList = () => {
               <Typography>Quantity: {order.quantity}</Typography>
               <Typography>Delivery Date: {order.deliveryDate.toDate().toString()}</Typography>
               <Typography>Status: {order.status}</Typography>
+              <Button variant="contained" color="primary" onClick={() => onEdit(order)}>
+                Edit
+              </Button>
               <Button variant="contained" color="secondary" onClick={() => handleDelete(order.orderId)}>
                 Delete
               </Button>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TextField, Button, Grid } from '@mui/material';
+import { TextField, Button, Grid, MenuItem } from '@mui/material';
 import { createOrder, updateOrderStatus } from '../utils/orderManagement';
 
 const OrderForm = ({ order, onUpdate }) => {
@@ -82,7 +82,12 @@ const OrderForm = ({ order, onUpdate }) => {
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             required
-          />
+            select
+          >
+            <MenuItem value="pending">Pending</MenuItem>
+            <MenuItem value="shipped">Shipped</MenuItem>
+            <MenuItem value="delivered">Delivered</MenuItem>
+          </TextField>
         </Grid>
         <Grid item xs={12}>
           <Button type="submit" variant="contained" color="primary">

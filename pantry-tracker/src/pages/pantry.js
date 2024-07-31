@@ -7,11 +7,13 @@ import { useState } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import Modal from '../components/Modal';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useRouter } from 'next/router';
 
 const PantryPage = () => {
   const { currentUser } = useAuth();
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleUpdate = () => {
     setSelectedItem(null);
@@ -31,7 +33,10 @@ const PantryPage = () => {
     <ProtectedRoute>
       <div className="container mx-auto px-4 py-8">
         <Typography variant="h4" className="text-2xl font-bold text-center mb-6">Pantry Items</Typography>
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-between mb-4">
+        <Button variant="contained" color="secondary" onClick={() => router.back()}>
+            Back
+          </Button>
           <Button 
             variant="contained" 
             color="primary" 
