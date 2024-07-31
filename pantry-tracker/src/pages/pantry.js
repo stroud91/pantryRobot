@@ -29,23 +29,32 @@ const PantryPage = () => {
 
   return (
     <ProtectedRoute>
-      <Typography variant="h4">Pantry Items</Typography>
-      <Button variant="contained" color="primary" onClick={() => handleOpenModal(null)}>
-        Add Item
-      </Button>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <PantryList userId={currentUser.uid} onEdit={handleOpenModal} />
+      <div className="container mx-auto px-4 py-8">
+        <Typography variant="h4" className="text-2xl font-bold text-center mb-6">Pantry Items</Typography>
+        <div className="flex justify-center mb-4">
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => handleOpenModal(null)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add Item
+          </Button>
+        </div>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <PantryList userId={currentUser.uid} onEdit={handleOpenModal} />
+          </Grid>
         </Grid>
-      </Grid>
-      <Modal
-        open={modalOpen}
-        handleClose={() => setModalOpen(false)}
-        title={selectedItem ? 'Update Item' : 'Add Item'}
-        handleSave={handleUpdate}
-      >
-        <PantryForm item={selectedItem} onUpdate={handleUpdate} />
-      </Modal>
+        <Modal
+          open={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          title={selectedItem ? 'Update Item' : 'Add Item'}
+          handleSave={handleUpdate}
+        >
+          <PantryForm item={selectedItem} onUpdate={handleUpdate} />
+        </Modal>
+      </div>
     </ProtectedRoute>
   );
 };

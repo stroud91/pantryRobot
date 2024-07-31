@@ -12,7 +12,6 @@ const PantryForm = ({ item, onUpdate }) => {
   const [unit, setUnit] = useState(item?.unit || '');
   const [expirationDate, setExpirationDate] = useState(item?.expirationDate ? item.expirationDate.toDate().toISOString().split('T')[0] : '');
   const [category, setCategory] = useState(item?.category || '');
-  
 
   useEffect(() => {
     if (item) {
@@ -37,7 +36,7 @@ const PantryForm = ({ item, onUpdate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -46,6 +45,7 @@ const PantryForm = ({ item, onUpdate }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            variant="outlined"
           />
         </Grid>
         <Grid item xs={6}>
@@ -56,6 +56,7 @@ const PantryForm = ({ item, onUpdate }) => {
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             required
+            variant="outlined"
           />
         </Grid>
         <Grid item xs={6}>
@@ -66,12 +67,12 @@ const PantryForm = ({ item, onUpdate }) => {
             onChange={(e) => setUnit(e.target.value)}
             required
             select
+            variant="outlined"
           >
             <MenuItem value="liters">Liters</MenuItem>
             <MenuItem value="pieces">Pieces</MenuItem>
             <MenuItem value="loaf">Loaf</MenuItem>
             <MenuItem value="kg">Kg</MenuItem>
-           
           </TextField>
         </Grid>
         <Grid item xs={12}>
@@ -83,6 +84,7 @@ const PantryForm = ({ item, onUpdate }) => {
             onChange={(e) => setExpirationDate(e.target.value)}
             InputLabelProps={{ shrink: true }}
             required
+            variant="outlined"
           />
         </Grid>
         <Grid item xs={12}>
@@ -93,16 +95,16 @@ const PantryForm = ({ item, onUpdate }) => {
             onChange={(e) => setCategory(e.target.value)}
             required
             select
+            variant="outlined"
           >
             <MenuItem value="Dairy">Dairy</MenuItem>
             <MenuItem value="Bakery">Bakery</MenuItem>
             <MenuItem value="Fruit">Fruit</MenuItem>
             <MenuItem value="Meat">Meat</MenuItem>
-            
           </TextField>
         </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
+        <Grid item xs={12} className="text-center">
+          <Button type="submit" variant="contained" color="primary" className="mt-4">
             {item ? 'Update' : 'Add'} Item
           </Button>
         </Grid>

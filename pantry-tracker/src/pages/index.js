@@ -69,6 +69,17 @@ const HomePage = () => {
               </Link>
             </Grid>
             <Grid item>
+              <Link href="/pantry" passHref>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded"
+                >
+                  Manage Pantries
+                </Button>
+              </Link>
+            </Grid>
+            <Grid item>
               <Link href="/warehouses" passHref>
                 <Button
                   variant="contained"
