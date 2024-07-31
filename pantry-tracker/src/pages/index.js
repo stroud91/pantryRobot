@@ -1,11 +1,16 @@
 'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Container, Typography, Button, Grid } from '@mui/material';
+import Modal from '../components/Modal';
+import Signin from '../components/Signin';
+import Signup from '../components/Signup';
 
 export default function HomePage() {
   const { currentUser, logout } = useAuth();
+  const [signInOpen, setSignInOpen] = useState(false);
+  const [signUpOpen, setSignUpOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -23,42 +28,25 @@ export default function HomePage() {
         {!currentUser ? (
           <>
             <Grid item>
-              <Link href="/signup" passHref>
-                <Button variant="contained" color="primary">Sign Up</Button>
-              </Link>
+              <Button variant="contained" color="primary" onClick={() => setSignUpOpen(true)}>Sign Up</Button>
             </Grid>
             <Grid item>
-              <Link href="/signin" passHref>
-                <Button variant="contained" color="primary">Sign In</Button>
-              </Link>
+              <Button variant="contained" color="primary" onClick={() => setSignInOpen(true)}>Sign In</Button>
             </Grid>
           </>
         ) : (
           <>
             <Grid item>
-              <Link href="/profile" passHref>
-                <Button variant="contained" color="primary">Profile</Button>
-              </Link>
+              <Button variant="contained" color="primary">Profile</Button>
             </Grid>
             <Grid item>
-              <Link href="/warehouses" passHref>
-                <Button variant="contained" color="primary">Manage Warehouses</Button>
-              </Link>
+              <Button variant="contained" color="primary">Manage Warehouses</Button>
             </Grid>
             <Grid item>
-              <Link href="/orders" passHref>
-                <Button variant="contained" color="primary">Manage Orders</Button>
-              </Link>
+              <Button variant="contained" color="primary">Manage Orders</Button>
             </Grid>
             <Grid item>
-              <Link href="/suppliers" passHref>
-                <Button variant="contained" color="primary">Manage Suppliers</Button>
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/pantry" passHref>
-                <Button variant="contained" color="primary">Manage Pantry Items</Button>
-              </Link>
+              <Button variant="contained" color="primary">Manage Suppliers</Button>
             </Grid>
             <Grid item>
               <Button variant="contained" color="secondary" onClick={handleLogout}>
@@ -68,6 +56,12 @@ export default function HomePage() {
           </>
         )}
       </Grid>
+      <Modal open={signInOpen} handleClose={() => setSignInOpen(false)} title="Sign In">
+        <Signin handleClose={() => setSignInOpen(false)} />
+      </Modal>
+      <Modal open={signUpOpen} handleClose={() => setSignUpOpen(false)} title="Sign Up">
+        <Signup handleClose={() => setSignUpOpen(false)} />
+      </Modal>
     </Container>
   );
 }

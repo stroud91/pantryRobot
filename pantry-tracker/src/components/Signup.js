@@ -1,72 +1,50 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { TextField, Button, Grid, Typography } from '@mui/material';
-import { useAuth } from '../contexts/AuthContext';
-import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../utils/firebaseConfig';
+import { TextField, Button, Typography } from '@mui/material';
 
-const Signup = () => {
+const Signup = ({ handleClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { signup, currentUser } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (currentUser) {
-      router.push('/profile');
-    }
-  }, [currentUser, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     try {
-      await signup(email, password);
-      router.push('/profile');
+      await createUserWithEmailAndPassword(auth, email, password);
+      handleClose();
     } catch (err) {
-      setError(err.message);
+      setError('Failed to sign up');
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h4">Sign Up</Typography>
-        </Grid>
-        {error && (
-          <Grid item xs={12}>
-            <Typography color="error">{error}</Typography>
-          </Grid>
-        )}
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
-            Sign Up
-          </Button>
-        </Grid>
-      </Grid>
+      <Typography variant="h6">Sign Up</Typography>
+      {error && <Typography color="error">{error}</Typography>}
+      <TextField
+        fullWidth
+        label="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        margin="normal"
+      />
+      <Button type="submit" variant="contained" color="primary">
+        Sign Up
+      </Button>
     </form>
   );
 };
-
 export default Signup;
