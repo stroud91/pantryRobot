@@ -1,28 +1,53 @@
+'use client';
+
 import { useState } from 'react';
 import SupplierForm from '../components/SupplierForm';
 import SupplierList from '../components/SupplierList';
-import { Grid, Typography } from '@mui/material';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import { Grid, Typography, Button } from '@mui/material';
+import ProtectedRoute from '../components/ProtectedRoute';
+import Modal from '../components/Modal';
 
 const SuppliersPage = () => {
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleUpdate = () => {
     setSelectedSupplier(null);
+    setModalOpen(false);
+  };
+
+  const handleOpenModal = (supplier) => {
+    setSelectedSupplier(supplier);
+    setModalOpen(true);
   };
 
   return (
-    <div>
-        <ProtectedRoute>
-      <Typography variant="h4">Suppliers</Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+    <div className="container mx-auto px-4 py-8">
+      <ProtectedRoute>
+        <Typography variant="h4" className="text-2xl font-bold text-center mb-6">Suppliers</Typography>
+        <div className="flex justify-center mb-4">
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => handleOpenModal(null)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add Supplier
+          </Button>
+        </div>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <SupplierList onEdit={handleOpenModal} />
+          </Grid>
+        </Grid>
+        <Modal
+          open={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          title={selectedSupplier ? 'Update Supplier' : 'Add Supplier'}
+          handleSave={handleUpdate}
+        >
           <SupplierForm supplier={selectedSupplier} onUpdate={handleUpdate} />
-        </Grid>
-        <Grid item xs={12}>
-          <SupplierList />
-        </Grid>
-      </Grid>
+        </Modal>
       </ProtectedRoute>
     </div>
   );

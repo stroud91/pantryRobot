@@ -44,24 +44,43 @@ const WarehousePage = () => {
   };
 
   return (
-    <div>
-      <Typography variant="h4">Warehouses</Typography>
-      <Button variant="contained" color="primary" onClick={() => handleOpenForm()}>
-        Add Warehouse
-      </Button>
-      <Grid container spacing={2} style={{ marginTop: '20px' }}>
+    <div className="container mx-auto px-4 py-8">
+      <Typography variant="h4" className="text-2xl font-bold text-center mb-6">Warehouses</Typography>
+      <div className="flex justify-center mb-4">
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={() => handleOpenForm()}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Add Warehouse
+        </Button>
+      </div>
+      <Grid container spacing={4}>
         {warehouses && warehouses.map(warehouse => (
           <Grid item xs={12} sm={6} md={4} key={warehouse.warehouseId}>
-            <Card>
+            <Card className="bg-white shadow-md rounded-lg overflow-hidden">
               <CardContent>
-                <Typography variant="h5">{warehouse.name}</Typography>
+                <Typography variant="h5" className="font-bold">{warehouse.name}</Typography>
                 <Typography>Location: {warehouse.location}</Typography>
-                <Button variant="contained" color="secondary" onClick={() => handleOpenForm(warehouse)}>
-                  Edit
-                </Button>
-                <Button variant="contained" color="secondary" onClick={() => handleDelete(warehouse.warehouseId)}>
-                  Delete
-                </Button>
+                <div className="flex justify-between mt-4">
+                  <Button 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={() => handleOpenForm(warehouse)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Edit
+                  </Button>
+                  <Button 
+                    variant="contained" 
+                    color="secondary" 
+                    onClick={() => handleDelete(warehouse.warehouseId)}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Delete
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </Grid>

@@ -30,7 +30,7 @@ const SupplierForm = ({ supplier, onUpdate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
@@ -39,6 +39,7 @@ const SupplierForm = ({ supplier, onUpdate }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            variant="outlined"
           />
         </Grid>
         <Grid item xs={12}>
@@ -48,6 +49,7 @@ const SupplierForm = ({ supplier, onUpdate }) => {
             value={contactInfo}
             onChange={(e) => setContactInfo(e.target.value)}
             required
+            variant="outlined"
           />
         </Grid>
         <Grid item xs={12}>
@@ -57,10 +59,11 @@ const SupplierForm = ({ supplier, onUpdate }) => {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             required
+            variant="outlined"
           />
         </Grid>
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary">
+        <Grid item xs={12} className="text-center">
+          <Button type="submit" variant="contained" color="primary" className="mt-4">
             {supplier ? 'Update' : 'Add'} Supplier
           </Button>
         </Grid>
