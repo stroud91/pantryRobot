@@ -1,19 +1,32 @@
-'use client';
-
-import { useContext, useEffect, useState, createContext } from 'react';
+import { useContext, createContext, useState, useEffect } from 'react';
 import { auth } from '../utils/firebaseConfig';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged 
-} from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const AuthContext = createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const signin = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const signup = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = () => {
+    return signOut(auth);
+  };
+
+  const getCurrentUserId = () => {
+    return currentUser ? currentUser.uid : null;
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -21,30 +34,20 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
-  const signup = async (email, password) => {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  };
-
-  const signin = async (email, password) => {
-    return await signInWithEmailAndPassword(auth, email, password);
-  };
-
-  const logout = async () => {
-    return await signOut(auth);
+  const value = {
+    currentUser,
+    signin,
+    signup,
+    logout,
+    getCurrentUserId
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, signup, signin, logout }}>
+    <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    console.log("useAuth context:", context);
-    return context;
-  };

@@ -9,6 +9,18 @@ const theme = createTheme({
       main: '#dc004e',
     },
   },
+  typography: {
+    fontFamily: 'Roboto, sans-serif',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: '8px',
+        },
+      },
+    },
+  },
 });
 
 export default theme;

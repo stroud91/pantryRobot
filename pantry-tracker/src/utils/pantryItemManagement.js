@@ -1,5 +1,5 @@
 import { db } from './firebaseConfig';
-import { collection, addDoc, getDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, doc, onSnapshot,deleteDoc,updateDoc } from "firebase/firestore";
 
 const createPantryItem = async (item) => {
   await addDoc(collection(db, "pantryItems"), {
@@ -10,6 +10,11 @@ const createPantryItem = async (item) => {
 };
 
 const createSeedPantryItems = async (userId) => {
+  if (!userId) {
+    console.error("User ID is undefined");
+    return;
+  }
+
   const seedItems = [
     { name: 'Milk', quantity: 2, unit: 'liters', expirationDate: new Date(), category: 'Dairy', userId },
     { name: 'Eggs', quantity: 12, unit: 'pieces', expirationDate: new Date(), category: 'Dairy', userId },
@@ -30,6 +35,10 @@ const createSeedPantryItems = async (userId) => {
 };
 
 const getPantryItems = (userId, setPantryItems) => {
+  if (!userId) {
+    console.error("User ID is undefined");
+    return;
+  }
 
   const q = query(collection(db, "pantryItems"), where("userId", "==", userId));
   const unsubscribe = onSnapshot(q, (querySnapshot) => {
